@@ -84,7 +84,7 @@ namespace Gifter.Repositories
         }
 
         public UserProfile GetByIdWithPosts(int id)
-        { }
+        { return null; }
 
         public void Add(UserProfile profile)
         {
