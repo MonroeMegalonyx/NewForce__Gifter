@@ -191,7 +191,7 @@ namespace Gifter.Repositories
                         reader.Close();
 
                         return post;
-                    }
+                    } return null;
 
                 }
             }
