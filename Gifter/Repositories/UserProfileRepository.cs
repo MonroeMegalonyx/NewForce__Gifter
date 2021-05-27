@@ -83,6 +83,9 @@ namespace Gifter.Repositories
             }
         }
 
+        public UserProfile GetByIdWithPosts(int id)
+        { }
+
         public void Add(UserProfile profile)
         {
             using (var conn = Connection)
