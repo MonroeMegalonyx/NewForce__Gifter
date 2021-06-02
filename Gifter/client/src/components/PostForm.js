@@ -21,7 +21,7 @@ const PostForm = () => {
       //   "name": "",
       //   "email": "",
       //   "imageUrl": "",
-      //   "bio": "",
+      //   "bio": "", 
       //   "dateCreated": "2021-06-01T15:22:02.404Z"
       // },
       "comments": null

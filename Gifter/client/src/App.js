@@ -28,12 +28,14 @@ import "./App.css";
 import { PostProvider } from "./providers/PostProvider";
 import PostList from "./components/PostList";
 import PostForm from "./components/PostForm";
+import PostSearch from "./components/SearchForm";
 
 function App() {
   return (
     <div className="App">
       <PostProvider>
-        <PostForm />
+        <PostSearch />
+          <PostForm />
         <PostList />
       </PostProvider>
     </div>
