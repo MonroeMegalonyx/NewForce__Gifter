@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Gifter.Repositories;
 using Gifter.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Gifter.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserProfileController : ControllerBase
@@ -21,27 +23,38 @@ namespace Gifter.Controllers
             return Ok(_userProfileRepository.GetAll());
         }
 
-        [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        //[HttpGet("{id}")]
+        //public IActionResult Get(int id)
+        //{
+        //    var post = _userProfileRepository.GetById(id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(post);
+        //}
+
+        [HttpGet("{firebaseUserId}")]
+        public IActionResult GetByFirebaseUserId(string firebaseUserId)
         {
-            var post = _userProfileRepository.GetById(id);
-            if (post == null)
+            var userProfile = _userProfileRepository.GetByFirebaseUserId(firebaseUserId);
+            if (userProfile == null)
             {
                 return NotFound();
             }
-            return Ok(post);
+            return Ok(userProfile);
         }
 
-        [HttpGet("{id}/posts")]
-        public IActionResult GetByIdWithPosts(int id)
-        {
-            var post = _userProfileRepository.GetByIdWithPosts(id);
-            if (post == null)
-            {
-                return NotFound();
-            }
-            return Ok(post);
-        }
+        //[HttpGet("{id}/posts")]
+        //public IActionResult GetByIdWithPosts(int id)
+        //{
+        //    var post = _userProfileRepository.GetByIdWithPosts(id);
+        //    if (post == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(post);
+        //}
 
         [HttpPost]
         public IActionResult Post(UserProfile profile)

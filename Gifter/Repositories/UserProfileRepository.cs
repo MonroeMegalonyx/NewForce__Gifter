@@ -83,6 +83,42 @@ namespace Gifter.Repositories
             }
         }
 
+        public UserProfile GetByFirebaseUserId(string firebaseUserId)
+        {
+            using (var conn = Connection)
+            {
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"
+                        SELECT Id, FirebaseUserId, Name, Email, ImageUrl, Bio, DateCreated
+                            FROM UserProfile
+                    WHERE FirebaseUserId = @FirebaseuserId";
+
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", firebaseUserId);
+
+                    UserProfile userProfile = null;
+
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        userProfile = new UserProfile()
+                        {
+                            Id = DbUtils.GetInt(reader, "Id"),
+                            FirebaseUserId = DbUtils.GetString(reader, "FirebaseUserId"),
+                            Name = DbUtils.GetString(reader, "Name"),
+                            Email = DbUtils.GetString(reader, "Email"),
+                            ImageUrl = DbUtils.GetString(reader, "ImageUrl"),
+                            Bio = DbUtils.GetString(reader, "Bio"),
+                            DateCreated = DbUtils.GetDateTime(reader, "DateCreated"),
+                        };
+                    }
+                    reader.Close();
+
+                    return userProfile;
+                }
+            }
+        }
         public UserProfile GetByIdWithPosts(int id)
         { return null; }
 
@@ -94,13 +130,14 @@ namespace Gifter.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        INSERT INTO UserProfile (Name, Email, ImageUrl, Bio, DateCreated)
+                        INSERT INTO UserProfile (FirebaseUserId, Name, Email, ImageUrl, Bio, DateCreated)
                         OUTPUT INSERTED.ID
-                        VALUES (@Title, @Caption, @ImageUrl, @Bio, @DateCreated)";
+                        VALUES (@FirebaseUserId, @Name, @Email, @ImageUrl, @Bio, @DateCreated)";
 
+                    DbUtils.AddParameter(cmd, "@FirebaseUserId", profile.FirebaseUserId);
                     DbUtils.AddParameter(cmd, "@Name", profile.Name);
                     DbUtils.AddParameter(cmd, "@Email", profile.Email);
-                    DbUtils.AddParameter(cmd, "@DateCreated", profile.DateCreated);
+                    DbUtils.AddParameter(cmd, "@DateCreated", "6 / 21 / 2020 12:00:00 AM");
                     DbUtils.AddParameter(cmd, "@ImageUrl", profile.ImageUrl);
                     DbUtils.AddParameter(cmd, "@Bio", profile.Bio);
 

@@ -1,38 +1,56 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import {UserProfileContext} from "./UserProfileProvider"
 
 export const PostContext = React.createContext();
 
 export const PostProvider = (props) => {
   const [posts, setPosts] = useState([]);
   const [searchTerms, setSearch] = useState("")
+  const { getToken } = useContext(UserProfileContext);
 
 
   const getAllPosts = () => {
-    return fetch("/api/post")
+    return getToken().then((token) =>
+    fetch("/api/post", {
+      headers: {
+      Authorization: `Bearer ${token}`
+    }})
       .then((res) => res.json())
-      .then(setPosts);
+      .then(setPosts));
   };
 
   const getAllPostsWithComments = () => {
-    return fetch("/api/post/GetWithComments")
+    return getToken().then((token) =>
+    fetch("/api/post/GetWithComments", {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
       .then((res) => res.json())
-      .then(setPosts);
+      .then(setPosts));
   };
 
   const addPost = (post) => {
-    return fetch("/api/post", {
+    return getToken().then((token) =>
+    fetch("/api/post", {
       method: "POST",
       headers: {
+        Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify(post),
-    });
+    }));
   };
 
   const searchPost = () => {
-    return fetch(`/api/post/search?q=${searchTerms}&sortDesc=false`)
+    return getToken().then((token) =>
+    fetch(`/api/post/search?q=${searchTerms}&sortDesc=false`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
     .then((res) => res.json())
-    .then(setPosts);
+    .then(setPosts));
   }
 
   return (

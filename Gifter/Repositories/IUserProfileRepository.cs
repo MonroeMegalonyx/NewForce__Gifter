@@ -11,5 +11,6 @@ namespace Gifter.Repositories
         UserProfile GetById(int id);
         UserProfile GetByIdWithPosts(int id);
         void Update(UserProfile profile);
+        UserProfile GetByFirebaseUserId(string firebaseUserId);
     }
 }
